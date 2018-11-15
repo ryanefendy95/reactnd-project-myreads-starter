@@ -17,14 +17,24 @@ class MyReadApp extends Component {
     searchedBooks: []
   };
 
+  componentDidMount() {
+    // get books on load
+    BooksAPI.getAll().then(books => this.setState({ books }));
+  }
+
   updateShelf = (bookToBeUpdated, newShelf) => {
-    bookToBeUpdated.shelf = newShelf;
-    this.setState(prevState => ({
-      books: [...prevState.books, bookToBeUpdated],
-      searchedBooks: prevState.searchedBooks.filter(
-        book => book.id !== bookToBeUpdated.id
-      )
-    }));
+    BooksAPI.update(bookToBeUpdated, newShelf).then(() => {
+      bookToBeUpdated.shelf = newShelf;
+      this.setState(prevState => ({
+        books: [
+          ...prevState.books.filter(book => book.id !== bookToBeUpdated.id),
+          bookToBeUpdated
+        ],
+        searchedBooks: prevState.searchedBooks.filter(
+          book => book.id !== bookToBeUpdated.id
+        )
+      }));
+    });
   };
 
   searchBooks = query => {
@@ -42,6 +52,10 @@ class MyReadApp extends Component {
     } else {
       this.setState({ searchedBooks: [] });
     }
+  };
+
+  cleanUpSearch = () => {
+    this.setState({ searchedBooks: [] });
   };
 
   render() {
@@ -87,6 +101,7 @@ class MyReadApp extends Component {
                 books={searchedBooks}
                 onSearch={this.searchBooks}
                 onUpdateShelf={this.updateShelf}
+                onCleanUp={this.cleanUpSearch}
               />
             )}
           />

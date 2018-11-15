@@ -7,6 +7,10 @@ class Search extends Component {
     query: ''
   };
 
+  componentWillUnmount() {
+    this.props.onCleanUp();
+  }
+
   onInputChange = ({ target: { value } }) => {
     this.setState({ query: value });
     this.props.onSearch(value);
