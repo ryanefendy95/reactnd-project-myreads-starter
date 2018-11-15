@@ -3,8 +3,8 @@ import React from 'react';
 const BookShelfChanger = ({ book, onUpdateShelf }) => (
   <div className="book-shelf-changer">
     <select
-      onChange={event => onUpdateShelf(book.title, event.target.value)}
-      value={book.shelf}
+      onChange={event => onUpdateShelf(book, event.target.value)}
+      value={book.shelf ? book.shelf : 'move'}
     >
       <option value="move" disabled>
         Move to...
