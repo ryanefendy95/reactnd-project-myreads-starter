@@ -4,7 +4,7 @@ const BookShelfChanger = ({ book, onUpdateShelf }) => (
   <div className="book-shelf-changer">
     <select
       onChange={event => onUpdateShelf(book, event.target.value)}
-      value={book.shelf ? book.shelf : 'move'}
+      value={book.shelf ? book.shelf : 'none'}
     >
       <option value="move" disabled>
         Move to...

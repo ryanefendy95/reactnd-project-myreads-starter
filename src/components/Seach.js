@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Book from './Book';
 
 class Search extends Component {
@@ -12,15 +13,15 @@ class Search extends Component {
   };
 
   render() {
-    const { toggleSearch, books, onUpdateShelf } = this.props;
+    const { books, onUpdateShelf } = this.props;
     const { query } = this.state;
 
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={toggleSearch}>
+          <Link className="close-search" to="/">
             Close
-          </a>
+          </Link>
           <div className="search-books-input-wrapper">
             <input
               type="text"

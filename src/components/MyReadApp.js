@@ -3,10 +3,11 @@ import * as BooksAPI from '../api/BooksAPI';
 import '../App.css';
 import Bookshelf from './Bookshelf';
 import Search from './Seach';
+import Error from './Error';
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 
 class MyReadApp extends Component {
   state = {
-    showSearchPage: false,
     shelves: [
       { type: 'currentlyReading', title: 'Currently Reading' },
       { type: 'wantToRead', title: 'Want to Read' },
@@ -28,53 +29,70 @@ class MyReadApp extends Component {
 
   searchBooks = query => {
     if (query) {
-      BooksAPI.search(query.trim()).then(books =>
-        this.setState({ searchedBooks: books })
-      );
+      BooksAPI.search(query.trim()).then(searchedBooks => {
+        searchedBooks.forEach(searchedBook => {
+          this.state.books.forEach(book => {
+            if (searchedBook.id === book.id) {
+              searchedBook.shelf = book.shelf;
+            }
+          });
+        });
+        this.setState({ searchedBooks });
+      });
+    } else {
+      this.setState({ searchedBooks: [] });
     }
   };
 
   render() {
     const { shelves, books, searchedBooks } = this.state;
     return (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <Search
-            toggleSearch={() => this.setState({ showSearchPage: false })}
-            books={searchedBooks}
-            onSearch={this.searchBooks}
-            onUpdateShelf={this.updateShelf}
-          />
-        ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                {shelves.map(shelve => {
-                  const shelfBooks = books.filter(
-                    book => book.shelf === shelve.type
-                  );
-                  return (
-                    <Bookshelf
-                      title={shelve.title}
-                      books={shelfBooks}
-                      key={shelve.title}
-                      onUpdateShelf={this.updateShelf}
-                    />
-                  );
-                })}
+      <BrowserRouter>
+        <Switch className="app">
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <div className="list-books">
+                <div className="list-books-title">
+                  <h1>MyReads</h1>
+                </div>
+                <div className="list-books-content">
+                  <div>
+                    {shelves.map(shelve => {
+                      const shelfBooks = books.filter(
+                        book => book.shelf === shelve.type
+                      );
+                      return (
+                        <Bookshelf
+                          title={shelve.title}
+                          books={shelfBooks}
+                          key={shelve.title}
+                          onUpdateShelf={this.updateShelf}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="open-search">
+                  <Link to="/search">Add a book</Link>
+                </div>
               </div>
-            </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>
-                Add a book
-              </a>
-            </div>
-          </div>
-        )}
-      </div>
+            )}
+          />
+          <Route
+            path="/search"
+            render={() => (
+              <Search
+                books={searchedBooks}
+                onSearch={this.searchBooks}
+                onUpdateShelf={this.updateShelf}
+              />
+            )}
+          />
+          <Route component={Error} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
