@@ -39,16 +39,20 @@ class MyReadApp extends Component {
 
   searchBooks = query => {
     if (query) {
-      BooksAPI.search(query.trim()).then(searchedBooks => {
-        searchedBooks.forEach(searchedBook => {
-          this.state.books.forEach(book => {
-            if (searchedBook.id === book.id) {
-              searchedBook.shelf = book.shelf;
-            }
+      BooksAPI.search(query.trim())
+        .then(searchedBooks => {
+          searchedBooks.forEach(searchedBook => {
+            this.state.books.forEach(book => {
+              if (searchedBook.id === book.id) {
+                searchedBook.shelf = book.shelf;
+              }
+            });
           });
+          this.setState({ searchedBooks });
+        })
+        .catch(() => {
+          this.setState({ searchedBooks: [] });
         });
-        this.setState({ searchedBooks });
-      });
     } else {
       this.setState({ searchedBooks: [] });
     }
