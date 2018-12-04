@@ -10,13 +10,24 @@ Alternatively, feel free to use `npm` instead of `yarn`
 $ git clone https://github.com/ryanefendy95/reactnd-project-myreads-starter.git
 $ cd reactnd-project-myreads-starter
 $ yarn install
-$ yarn start
+$ yarn start # visit localhost:3000 🍰✨
 ```
 
 ## Usage
 
-Navigate to `localhost:3000`
+- To change a book's category or remove a book from the list, click on the green button on the book cover
+- To add new books, click on the green + button at the bottom of the page. Enter an author's name or subject. Up to 20 items will be returned.
 
 ## Backend Server
 
-To simplify your development process, we've provided a backend server for you to develop against. The provided file [`BooksAPI.js`](src/Utils/BooksAPI.js) contains the methods you will need to perform necessary operations on the backend:
+The provided file [`BooksAPI.js`](src/BooksAPI.js) contains following methods to perform necessary operations on the backend:
+
+- [`getAll`](#getall) To get all the books from the API
+- [`update`](#update) Update shelf information of the book
+- [`search`](#search) Search book in the database
+
+### Screenshots
+
+![Main Page](https://raw.githubusercontent.com/cubiio/reactnd-myreads/master/docs/myreads.png)
+
+![Search Page](https://raw.githubusercontent.com/cubiio/reactnd-myreads/master/docs/search.png)
